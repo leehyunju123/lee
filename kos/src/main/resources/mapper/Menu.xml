@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.menu.dao.menuDao">
+			
+
+<resultMap type = "com.kos.vo.MenuInfoVO" id = "MenuMap">
+		<result column = "menu_Code"	property="menuCode" />
+		<result column = "menu_Name"	property="menuName" />
+		<result column = "menu_Price"	property="menuPrice" />
+		<result column = "menu_Image"	property="menuImage" />
+		<result column = "menu_Detail"	property="menuDetail" />
+	</resultMap>
+	
+	
+	<select id = "selectMenuInfoList" resultMap = "MenuMap">
+		SELECT
+			A.MENU_CODE,
+			A.MENU_NAME,
+			A.MENU_PRICE,
+			A.MENU_IMAGE
+		FROM TB_MENU_INFO A
+		JOIN TB_RESTAURANT_INFO B ON A.RESTAURANT_CODE = B.RESTAURANT_CODE
+		WHERE A.RESTAURANT_CODE = #{restaurantCode}
+	</select>
+	
+		<select id = "selectDetailInfo" resultMap = "MenuMap">
+		SELECT
+			MENU_CODE,
+			MENU_NAME,
+			MENU_PRICE,
+			MENU_DETAIL,
+			MENU_IMAGE
+		FROM TB_MENU_INFO
+		WHERE MENU_CODE = #{menuCode}
+	</select>
+	
+	
+</mapper>

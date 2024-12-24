@@ -1,0 +1,250 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쇼핑몰 식당가 키오스크</title>
+    <style>
+        @font-face {
+            font-family: 'seolleimcool-SemiBold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/seolleimcool-SemiBold.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'seolleimcool-SemiBold';
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+            position: relative;
+        }
+        header {
+            background-color: orangered;
+            color: white;
+            padding: 10px;
+        }
+        main {
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 800px;
+            margin: auto;
+        }
+        .menu-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .menu-item:hover {
+            transform: scale(1.1);
+        }
+        .cart {
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            width: 500px;  /* 사이즈 조정 */
+            height: 400px; 
+            margin: 20px;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            overflow-y: auto; 
+        }
+        .cart-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center; 
+        }
+        .quantity-control button {
+            margin: 0 5px; 
+            cursor: pointer;
+        }
+        #empty-cart {
+            display: block;
+        }
+        #total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .category {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .category button {
+            margin: 0 10px;
+            padding: 15px 30px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px; /* 글자 크기 조정 */
+        }
+        .category button:hover {
+            background-color: #0056b3;
+        }
+        .order-button {
+            background-color: orangered;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px; 
+            font-size: 50px; 
+            cursor: pointer;
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            z-index: 1000;
+            width: 360px;
+            height: 200px;
+        }
+        .order-button:hover {
+            background-color: darkorange;
+        }
+        .reset-button {
+            background-color: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 50%; 
+            padding: 0; 
+            font-size: 40px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 150px; 
+            height: 150px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: fixed; 
+            bottom: 355px; 
+            right: 22px; 
+        }
+        .reset-button:hover {
+            background-color: #c82333; 
+        }
+        #timer-display {
+            position: fixed;
+            bottom: 370px; 
+            right: 200px; 
+            font-size: 40px; 
+            font-weight: bold;
+            color: orangered;
+            background-color: white; 
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+        }
+        #selected-count {
+            position: fixed;
+            bottom: 260px; 
+            right: 18px; 
+            font-size: 50px; 
+            font-weight: bold;
+            color: orangered; 
+            background-color: white; 
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>쇼핑몰 식당가</h1>
+    </header>
+
+    <main>
+        <h2>카테고리</h2>
+        <div class="category">
+            <button>한식</button>
+            <button>양식</button>
+            <button>중식</button>
+            <button>일식</button>
+            <button>분식</button>
+            <button>기타</button>
+        </div>
+
+        <section id="menu">
+            <div class="menu-item" data-category="korean">
+                <img src="/assets/css/restaurant.jpeg" alt="김밥천국" style="width: 100%; border-radius: 8px;">김밥천국
+            </div>
+        </section>
+    </main>
+
+    <div id="cart" class="cart">
+        <h3>내가 담은 상품</h3>
+        <div id="cart-items">
+            <div class="cart-item">
+                <button class="remove-item">X</button>
+                아메리카노 <span>₩4,000</span>
+                <div class="quantity-control">
+                    <button class="decrease-quantity">-</button>
+                    <span class="quantity">1</span>
+                    <button class="increase-quantity">+</button>
+                </div>
+            </div>
+            <div class="cart-item">
+                <button class="remove-item">X</button>
+                떡볶이 <span>₩3,500</span>
+                <div class="quantity-control">
+                    <button class="decrease-quantity">-</button>
+                    <span class="quantity">1</span>
+                    <button class="increase-quantity">+</button>
+                </div>
+            </div>
+            <div class="cart-item">
+                <button class="remove-item">X</button>
+                치킨 <span>₩10,000</span>
+                <div class="quantity-control">
+                    <button class="decrease-quantity">-</button>
+                    <span class="quantity">1</span>
+                    <button class="increase-quantity">+</button>
+                </div>
+            </div>
+            <div class="cart-item">
+                <button class="remove-item">X</button>
+                비빔밥 <span>₩8,000</span>
+                <div class="quantity-control">
+                    <button class="decrease-quantity">-</button>
+                    <span class="quantity">1</span>
+                    <button class="increase-quantity">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="reset-button">초기화</button>
+    <button class="order-button">합계 : 0원<br>주문하기</br></button>
+    <div id="selected-count">선택한 메뉴 : 0개</div>
+
+    <div style="position: fixed; bottom: 80px; right: 20px; display: flex; align-items: center;"></div>
+
+    <div id="timer-display">남은 시간 <br>00:00</br></div>
+</body>
+</html>

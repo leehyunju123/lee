@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.payment.dao.paymentDao">
+
+	<resultMap type = "com.kos.vo.PointInfoVO" id = "PointMap">
+		<result column = "member_Phone"	property="memberPhone" />
+		<result column = "after_Point"	property="afterPoint" />
+		<result column = "qty"	property="qty" />
+		<result column = "price"	property="price" />
+		<result column = "restaurant_Code"	property="restaurantCode" />
+		<result column = "order_No"	property="orderNo" />
+		<result column = "order_Dt"	property="orderDt" />
+		<result column = "restaurantOrder_No"	property="restaurantOrderNo" />
+		<result column = "menu_Code"	property="menuCode" />
+		<result column = "qty"	property="qty" />
+		<result column = "menu_Price"	property="menuPrice" />
+		<result column = "menu_Name"	property="menuName" />
+		<result column = "price"	property="price" />
+		<result column = "total_Price"	property="totalPrice" />
+		<result column = "discount_Amount"	property="discountAmount" />
+		<result column = "restaurant_Name"	property="restaurantName" />
+		<result column = "point"	property="point" />
+	</resultMap>
+	
+	
+	<select id="selectPaymentInfo" resultMap="PointMap">
+	    select
+       		 member_phone,
+       		 point
+   	    from tb_member_info
+   	 where 1=1
+   	   <if test="memberPhone!=null and memberPhone!='' ">
+	      	 	  AND MEMBER_PHONE LIKE '%'||#{memberPhone}||'%'
+	      </if>
+	</select>
+	
+		<select id="selectPaymentInfos" resultMap="PointMap">
+	    SELECT
+	        QTY,
+	        PRICE
+	    FROM TB_RESTAURANTORDERMENU_INFO
+	    WHERE ORDER_NO = #{orderNo}
+	</select>
+	
+	<select id="selectOrderInfo" resultMap="PointMap">
+          SELECT
+            B.MENU_NAME,
+            A.QTY,
+            A.PRICE,
+            B.MENU_PRICE,
+            C.DISCOUNT_AMOUNT
+        FROM TB_RESTAURANTORDERMENU_INFO A
+        JOIN TB_MENU_INFO B ON A.MENU_CODE = B.MENU_CODE
+        JOIN TB_ORDER_INFO C ON A.ORDER_NO = C.ORDER_NO
+        WHERE A.ORDER_NO = #{orderNo}
+	</select>
+	
+<update id="updatePointInfo">
+    <!-- tb_order_info의 discount_amount 업데이트 -->
+    update tb_order_info
+    set discount_amount = #{discountAmount}
+    where order_no = #{orderNo}
+</update>
+
+<insert id="insertAfterInfo">
+INSERT INTO tb_point_info (
+    member_phone,     
+    point,             
+    order_no,       
+    order_dt,          
+    use_point,        
+    after_point        
+)
+VALUES (
+    #{memberPhone},                                 
+    (SELECT point FROM tb_member_info WHERE member_phone = #{memberPhone}),  
+    #{orderNo},                                     
+    sysdate,                                          
+    #{discountAmount},                                     
+    (SELECT point FROM tb_member_info WHERE member_phone = #{memberPhone}) - #{discountAmount}
+)
+</insert>
+
+<update id="updateAfterInfo">
+    UPDATE tb_member_info
+    SET point = (
+        SELECT after_point
+        FROM tb_point_info
+        WHERE member_phone = #{memberPhone}
+        ORDER BY order_dt DESC
+        FETCH FIRST 1 ROWS ONLY
+    )
+    WHERE member_phone = #{memberPhone}
+</update>
+
+
+	
+	
+	
+	<select id="selectListInfo" resultMap="PointMap">
+	 select
+	b.restaurant_name,
+	a.restaurantorder_no
+	from tb_restaurantorder_info a
+	join tb_restaurant_info b on a.restaurant_code = b.restaurant_code
+	where order_no = #{orderNo}
+	</select>
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+

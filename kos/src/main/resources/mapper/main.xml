@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.restaurant.dao.restaurantDao">
+
+	<resultMap type = "com.kos.vo.RestaurantInfoVO" id = "restaurantMap">
+		<result column = "restaurant_Name"	property="restaurantName" />
+		<result column = "restaurant_Image"	property="restaurantImage" />
+		<result column = "restaurant_Code"	property="restaurantCode" />
+	</resultMap>
+	
+	
+	<select id = "selectRestaurantInfoList" resultMap = "restaurantMap">
+	SELECT
+		RESTAURANT_CODE,
+		RESTAURANT_NAME,
+		RESTAURANT_IMAGE
+	FROM TB_RESTAURANT_INFO
+	WHERE RESTAURANT_CATEGORY = #{restaurantCategory}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+

@@ -1,0 +1,36 @@
+package com.kos.member.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class memberController {
+
+<<<<<<< .mine
+	
+	@RequestMapping("/member/password")
+	public String menuList() throws Exception {
+||||||| .r35
+=======
+	@RequestMapping("/member/password")
+	public String memberPwd() throws Exception {
+>>>>>>> .r37
+		return "/member/password";
+	}
+<<<<<<< .mine
+
+	@RequestMapping("/member/join")
+	public String join() throws Exception {
+		return "/member/join";
+	}
+||||||| .r35
+=======
+	
+	@RequestMapping("/member/earnpoint")
+	public String earnPoint() throws Exception {
+		return "/member/earnpoint";
+	}
+	
+	
+>>>>>>> .r37
+}

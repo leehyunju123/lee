@@ -1,0 +1,11 @@
+package com.kos.vo;
+
+public class restaurantOrderMenuInfoVO {
+
+	private String orderNo;
+	private String restaurantCode;
+	private String orderDate;
+	private String menuCode;
+	private int qty;
+	private int price;
+}

@@ -1,0 +1,18 @@
+package com.kos.member.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+@Controller
+public class memberController {
+
+	
+	@RequestMapping("/member/password")
+	public String menuList() throws Exception {
+		return "/member/password";
+	}
+
+	@RequestMapping("/member/join")
+	public String join() throws Exception {
+		return "/member/join";
+	}
+}

@@ -1,0 +1,14 @@
+package com.kos.vo;
+
+public class OrderInfoVO {
+	
+	private String orderNo;
+	private String orderDt;
+	private int orderPrice;
+	private int paymentAmount;
+	private int orderQty;
+	private String pointYN;
+	private int discountAmount;
+	private String paymentMethodCode;
+
+}

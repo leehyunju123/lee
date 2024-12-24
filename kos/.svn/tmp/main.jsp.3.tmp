@@ -1,0 +1,500 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<<<<<<< .mine
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쇼핑몰 식당가 키오스크</title>
+    <style>
+        @font-face {
+            font-family: 'seolleimcool-SemiBold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/seolleimcool-SemiBold.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'seolleimcool-SemiBold';
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+            position: relative;
+        }
+        header {
+            background-color: orangered;
+            color: white;
+            padding: 10px;
+        }
+        main {
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 800px;
+            margin: auto;
+        }
+        .menu-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .menu-item:hover {
+            transform: scale(1.1);
+        }
+        .cart {
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            width: 500px;  /* 사이즈 조정 */
+            height: 400px; 
+            margin: 20px auto; /* 가운데 정렬 */
+            overflow-y: auto; 
+            display: inline-block; /* 인라인 블록으로 설정 */
+            vertical-align: top; /* 수직 정렬 */
+        }
+        .cart-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center; 
+        }
+        .quantity-control button {
+            margin: 0 5px; 
+            cursor: pointer;
+        }
+        .category {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .category button {
+            margin: 0 10px;
+            padding: 15px 30px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px; /* 글자 크기 조정 */
+        }
+        .category button:hover {
+            background-color: #0056b3;
+        }
+        .order-button {
+            background-color: orangered;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px; 
+            font-size: 30px; /* 글자 크기 조정 */
+            cursor: pointer;
+            width: 360px;
+            height: 100px; /* 높이 조정 */
+            margin: 10px; /* 여백 추가 */
+        }
+        .order-button:hover {
+            background-color: darkorange;
+        }
+        .reset-button {
+            background-color: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 5px; 
+            padding: 10px 20px; 
+            font-size: 30px; /* 글자 크기 조정 */
+            cursor: pointer;
+            margin: 10px; /* 여백 추가 */
+        }
+        .reset-button:hover {
+            background-color: #c82333; 
+        }
+        #timer-display {
+            font-size: 30px; 
+            font-weight: bold;
+            color: orangered;
+            background-color: white; 
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+            margin: 10px; /* 여백 추가 */
+        }
+        #selected-count {
+            font-size: 30px; 
+            font-weight: bold;
+            color: orangered; 
+            background-color: white; 
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+            margin: 10px; /* 여백 추가 */
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* 버튼 간 간격을 조정 */
+            margin: 20px; /* 여백 추가 */
+            flex-direction: column; /* 세로로 정렬 */
+            align-items: center; /* 중앙 정렬 */
+        }
+        .button-row {
+            display: flex;
+            align-items: center; /* 중앙 정렬 */
+            justify-content: center; /* 가운데 정렬 */
+        }
+    </style>
+||||||| .r32
+=======
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쇼핑몰 식당가 키오스크</title>
+<style>
+@font-face {
+	font-family: 'seolleimcool-SemiBold';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/seolleimcool-SemiBold.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: 'seolleimcool-SemiBold';
+	margin: 0;
+	padding: 0;
+	background-color: #f8f8f8;
+	text-align: center;
+	position: relative;
+}
+
+header {
+	background-color: orangered;
+	color: white;
+	padding: 10px;
+}
+
+main {
+	padding: 20px;
+}
+
+h2 {
+	color: #333;
+}
+
+section {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	width: 800px;
+	margin: auto;
+}
+
+.menu-item {
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	padding: 10px;
+	margin: 10px;
+	width: 200px;
+	text-align: center;
+	cursor: pointer;
+	transition: transform 0.2s ease-in-out;
+}
+
+.menu-item:hover {
+	transform: scale(1.1);
+}
+
+.cart {
+	background-color: white;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	padding: 20px;
+	width: 500px; /* 사이즈 조정 */
+	height: 400px;
+	margin: 20px auto; /* 가운데 정렬 */
+	overflow-y: auto;
+	display: inline-block; /* 인라인 블록으로 설정 */
+	vertical-align: top; /* 수직 정렬 */
+}
+
+.cart-item {
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	padding: 10px;
+	margin: 5px 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.quantity-control {
+	display: flex;
+	align-items: center;
+}
+
+.quantity-control button {
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+.category {
+	display: flex;
+	justify-content: center;
+	margin: 20px 0;
+}
+
+.category button {
+	margin: 5px; /* 버튼 간격 조정 */
+	padding: 15px 20px; /* 버튼 패딩 조정 */
+	cursor: pointer;
+	background-color: white; /* 배경색을 흰색으로 변경 */
+	color: black; /* 글자색을 검은색으로 변경 */
+	border: 1px solid #ccc; /* 테두리 추가 */
+	border-radius: 20px; /* 모서리 더 둥글게 */
+	font-size: 30px; /* 글자 크기 조정 (더 크게) */
+	width: calc(25% - 20px); /* 4열로 배치 (여백 고려) */
+}
+
+.category button:hover {
+	background-color: #f0f0f0; /* 호버 시 색상 변경 */
+}
+
+.order-button {
+	background-color: orangered;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 15px 30px;
+	font-size: 30px; /* 글자 크기 조정 */
+	cursor: pointer;
+	width: 360px;
+	height: 100px; /* 높이 조정 */
+	margin: 10px; /* 여백 추가 */
+}
+
+.order-button:hover {
+	background-color: darkorange;
+}
+
+.reset-button {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 30px; /* 글자 크기 조정 */
+	cursor: pointer;
+	margin: 10px; /* 여백 추가 */
+}
+
+.reset-button:hover {
+	background-color: #c82333;
+}
+
+#timer-display {
+	font-size: 30px;
+	font-weight: bold;
+	color: orangered;
+	background-color: white;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	margin: 10px; /* 여백 추가 */
+}
+
+#selected-count {
+	font-size: 30px;
+	font-weight: bold;
+	color: orangered;
+	background-color: white;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	margin: 10px; /* 여백 추가 */
+}
+
+.button-container {
+	display: flex;
+	flex-direction: column; /* 세로로 정렬 */
+	align-items: center; /* 중앙 정렬 */
+}
+
+.button-row {
+	display: flex;
+	align-items: center; /* 중앙 정렬 */
+	justify-content: center; /* 가운데 정렬 */
+}
+</style>
+>>>>>>> .r36
+</head>
+<body>
+<<<<<<< .mine
+    <header>
+        <h1>쇼핑몰 식당가</h1>
+    </header>
+
+||||||| .r32
+=======
+>>>>>>> .r36
+    <main>
+        <h2>카테고리</h2>
+        <div class="category">
+            <button>한식</button>
+            <button>양식</button>
+            <button>중식</button>
+            <button>일식</button>
+            <button>분식</button>
+            <button>기타</button>
+        </div>
+
+        <section id="menu">
+            <div class="menu-item" data-category="korean">
+                <img src="/assets/css/restaurant.jpeg" alt="김밥천국" style="width: 100%; border-radius: 8px;">김밥천국
+            </div>
+        </section>
+    </main>
+		<h2>카테고리</h2>
+<<<<<<< .mine
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin: 20px auto; width: 800px;">
+        <div id="cart" class="cart">
+            <h3>내가 담은 상품</h3>
+            <div id="cart-items">
+                <div class="cart-item">
+                    <button class="remove-item">X</button>
+                    아메리카노 <span>₩4,000</span>
+                    <div class="quantity-control">
+                        <button class="decrease-quantity">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increase-quantity">+</button>
+                    </div>
+                </div>
+                <div class="cart-item">
+                    <button class="remove-item">X</button>
+                    떡볶이 <span>₩3,500</span>
+                    <div class="quantity-control">
+                        <button class="decrease-quantity">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increase-quantity">+</button>
+                    </div>
+                </div>
+                <div class="cart-item">
+                    <button class="remove-item">X</button>
+                    치킨 <span>₩10,000</span>
+                    <div class="quantity-control">
+                        <button class="decrease-quantity">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increase-quantity">+</button>
+                    </div>
+                </div>
+                <div class="cart-item">
+                    <button class="remove-item">X</button>
+                    비빔밥 <span>₩8,000</span>
+                    <div class="quantity-control">
+                        <button class="decrease-quantity">-</button>
+                        <span class="quantity">1</span>
+                        <button class="increase-quantity">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+||||||| .r32
+=======
+		<div class="category">
+			<button>한식</button>
+			<button>양식</button>
+			<button>중식</button>
+			<button>일식</button>
+			<button>분식</button>
+			<button>기타</button>
+		</div>
+>>>>>>> .r36
+
+<<<<<<< .mine
+        <div class="button-container">
+            <div class="button-row">
+                <div id="timer-display">남은 시간 <br>00:00</br></div>
+                <button class="reset-button">초기화</button>
+            </div>
+            <div id="selected-count">선택한 메뉴 : 0개</div>
+            <button class="order-button">합계 : 0원<br>주문하기</br></button>
+        </div>
+    </div>
+||||||| .r32
+=======
+		<section id="menu">
+			<div class="menu-item" data-category="korean">
+				<img src="/assets/css/restaurant.jpeg"
+					style="width: 100%; border-radius: 8px;">김밥천국
+			</div>
+		</section>
+	</main>
+
+	<div
+		style="display: flex; justify-content: space-between; align-items: flex-start; margin: 20px auto; width: 800px;">
+		<div id="cart" class="cart">
+			<h3>내가 담은 상품</h3>
+			<div id="cart-items">
+				<div class="cart-item">
+					<button class="remove-item">X</button>
+					순두부찌개 <span>₩6,000</span>
+					<div class="quantity-control">
+						<button class="decrease-quantity">-</button>
+						<span class="quantity">1</span>
+						<button class="increase-quantity">+</button>
+					</div>
+				</div>
+				<div class="cart-item">
+					<button class="remove-item">X</button>
+					떡볶이 <span>₩3,500</span>
+					<div class="quantity-control">
+						<button class="decrease-quantity">-</button>
+						<span class="quantity">1</span>
+						<button class="increase-quantity">+</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="button-container">
+			<div class="button-row" style="display: flex; align-items: center;">
+				<div id="timer-display">
+					<span style="color: black;">남은 시간 <br></span> <span
+						style="color: red;">90초</span>
+				</div>
+				<button class="reset-button">초기화</button>
+			</div>
+			<div
+				style="height: 2px; width: 100%; background-color: black; margin: 10px 0;"></div>
+			<div id="selected-count" style="margin-bottom: 10px;">선택한 메뉴 :
+				2개</div>
+			<button class="order-button" style="margin-bottom: 20px;">
+				9,500원<br>주문하기
+			</button>
+		</div>
+
+
+	</div>
+
+>>>>>>> .r36
+</body>
+</html>

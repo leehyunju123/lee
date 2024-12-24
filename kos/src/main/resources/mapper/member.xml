@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.member.dao.memberDao">
+			
+
+<resultMap type = "com.kos.vo.MemberInfoVO" id = "MemberMap">
+		<result column = "point"	property="point" />
+		<result column = "order_No"	property="orderNo" />
+		<result column = "price"	property="price" />
+		<result column = "after_Point"	property="afterPoint" />
+		<result column = "member_Phone"	property="memberPhone" />
+	</resultMap>
+	
+	<select id = "selectPointInfo" resultMap = "MemberMap">
+	    select
+  		 	 sum(price) * 0.01 point
+        from tb_restaurantordermenu_info
+   	    where ORDER_NO = #{orderNo}
+	</select>
+	
+	<update id="updatePointInfo">
+    UPDATE TB_MEMBER_INFO
+    SET point = point + #{point}
+    WHERE MEMBER_PHONE = #{memberPhone}
+	</update>
+	
+	
+	<insert id = "insertMemberInfo">
+	    INSERT INTO tb_member_info
+		VALUES 
+		(
+		#{memberPhone},
+		sysdate,
+		'N',
+		#{point}    
+		)
+
+	</insert>
+
+	<select id="selectMemberPointCount" resultType="integer">
+		SELECT
+		  COUNT(*)
+		  FROM TB_MEMBER_INFO
+		  WHERE MEMBER_PHONE = #{memberPhone}
+	</select>
+</mapper>

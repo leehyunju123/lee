@@ -1,0 +1,20 @@
+package com.kos.payment.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class paymentController {
+	
+	@RequestMapping("/paymentmethod/creditcard")
+	public String creditcard() throws Exception {
+		return "/paymentmethod/creditcard";
+	}
+	
+	@RequestMapping("/payment/complete")
+	public String complete() throws Exception {
+		return "/payment/complete";
+	}
+
+
+}

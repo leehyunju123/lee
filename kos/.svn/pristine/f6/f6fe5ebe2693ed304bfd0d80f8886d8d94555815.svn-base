@@ -1,0 +1,11 @@
+package com.kos.vo;
+
+public class MemberInfoVO {
+	
+	private String memberPhone;
+	private String joinDt;
+	private String memberPwd;
+	private String quitYN;
+	
+
+}

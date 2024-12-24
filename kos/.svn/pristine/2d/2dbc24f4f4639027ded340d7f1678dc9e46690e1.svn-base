@@ -1,0 +1,22 @@
+package com.kos.vo;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.springframework.web.multipart.MultipartFile;
+
+public class RestaurantInfoVO {
+	
+	private String restaurantCode;
+	private String restaurantName;
+	private String restaurantCategoryCode;
+	private String restaurantPhone;
+	private String restaurantEmail;
+	private String openDt;
+	private String closeDt;
+	private String businessNumber;
+	private String openYN;
+	@JsonIgnore
+	private MultipartFile restaurantimage;
+	private String regDt;
+	private String regId;
+	
+}

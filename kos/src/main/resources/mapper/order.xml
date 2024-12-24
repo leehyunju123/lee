@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kos.order.dao.orderDao">
+
+	<resultMap type = "com.kos.vo.OrderInfoVO" id = "OrderMap">
+		<result column = "restaurant_Code"	property="restaurantCode" />
+		<result column = "order_No"	property="orderNo" />
+		<result column = "order_Dt"	property="orderDt" />
+		<result column = "restaurantOrder_No"	property="restaurantOrderNo" />
+		<result column = "menu_Code"	property="menuCode" />
+		<result column = "qty"	property="qty" />
+		<result column = "menu_Price"	property="menuPrice" />
+		<result column = "menu_Name"	property="menuName" />
+		<result column = "price"	property="price" />
+		<result column = "rn" 	property="rn" />
+
+		
+	</resultMap>
+	
+	
+	<select id="selectMaxOrderNo" resultType="String">
+		select max(order_no)+1 from tb_order_info
+	</select>
+	
+	<insert id="insertRestaurantOrderInfo">
+	    insert into tb_restaurantorder_info
+	    (restaurant_code, order_no, order_dt, restaurantorder_no)
+	    select 
+	        distinct restaurant_code,
+	        #{orderNo} order_no,
+	        sysdate ,
+	        nvl(
+	            (select LPAD(max(to_number(restaurantorder_no)) + 1, 3, '0') 
+	             from tb_restaurantorder_info 
+	             where restaurant_code = A.restaurant_code 
+	               and to_char(order_dt, 'yyyymmdd') = to_char(sysdate, 'yyyymmdd')
+	            ), '001') restaurantorder_no
+	    from tb_menu_info A
+	    where menu_code in
+	    <foreach collection="orderlist" item="item" index="index" separator="," open="(" close=")">
+	        #{item.menuCode}
+	    </foreach>
+	</insert>
+
+	
+	<insert id="insertRestaurantOrderMenu">
+		insert into tb_restaurantordermenu_info
+		(order_no, menu_code, order_dt, restaurant_code, qty, price)
+		select
+		  #{orderNo} order_no,
+		  #{menuCode} menu_code,
+		  sysdate order_dt,
+		  restaurant_code,
+		  #{qty} qty,
+		  #{qty} * menu_price price
+		 from tb_menu_info
+		 where menu_code = #{menuCode}
+	</insert>
+	
+	<insert id="insertOrderInfo">
+		insert into tb_order_info
+		(order_no, order_dt, order_price, order_qty)
+		select order_no, to_date(to_char(order_dt,'yyyymmdd'),'yyyymmdd'), sum(price), sum(qty) from tb_restaurantordermenu_info
+		where order_no = #{orderNo}
+		group by order_no, to_char(order_dt,'yyyymmdd')
+	</insert>
+	
+
+	<select id="selectOrderInfo" resultMap="OrderMap">
+	    SELECT
+  			ROWNUM RN,
+	        B.MENU_NAME,
+	        A.QTY,
+	        A.PRICE
+	    FROM TB_RESTAURANTORDERMENU_INFO A
+	    JOIN TB_MENU_INFO B ON A.MENU_CODE = B.MENU_CODE
+	    WHERE ORDER_NO = #{orderNo}
+	</select>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+

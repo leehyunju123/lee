@@ -1,0 +1,166 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김밥집 키오스크</title>
+    <style>
+        @font-face {
+            font-family: 'seolleimcool-SemiBold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/seolleimcool-SemiBold.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'seolleimcool-SemiBold';
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+            position: relative; /* 위치 설정 */
+        }
+
+        header {
+            background-color: orangered;
+            color: white;
+            padding: 10px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 800px;
+            margin: auto;
+        }
+
+        .menu-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.1);
+        }
+
+        .cart {
+            position: fixed; /* 고정 위치 */
+            bottom: 20px; /* 아래 여백 */
+            left: 20px; /* 왼쪽 여백 */
+            background-color: white; /* 배경 색상 */
+            border: 2px solid #ccc; /* 테두리 */
+            border-radius: 8px; /* 모서리 둥글게 */
+            padding: 10px; /* 여백 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+            width: 300px; /* 너비 */
+            z-index: 1000; /* 가장 위에 표시 */
+            display: none; /* 초기에는 보이지 않도록 설정 */
+        }
+
+        .cart-item {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity button {
+            margin: 0 5px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            color: red;
+            cursor: pointer;
+        }
+
+        #empty-cart {
+            display: block;
+        }
+
+        #total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px; /* 마진 조정 */
+        }
+
+        .category {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .category button {
+            margin: 0 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .category button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>쇼핑몰 식당가</h1>
+    </header>
+
+    <main>
+        <h2>카테고리</h2>
+
+        <div class="category">
+            <button onclick="showCategory('korean')">한식</button>
+            <button onclick="showCategory('western')">양식</button>
+            <button onclick="showCategory('chinese')">중식</button>
+            <button onclick="showCategory('japanese')">일식</button>
+        </div>
+
+        <section id="menu">
+
+        </section>
+    </main>
+
+    <div id="cart" class="cart">
+        <h2>장바구니</h2>
+        <div id="empty-cart">장바구니가 비어 있습니다.</div>
+        <div id="cart-items"></div>
+        <div id="total">합계: ₩0</div>
+    </div>
+
+    <script>
+  
+    </script>
+
+</body>
+</html>
