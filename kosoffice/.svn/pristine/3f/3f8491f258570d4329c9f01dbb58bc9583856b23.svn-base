@@ -1,0 +1,18 @@
+package com.koffice.sales.cotroller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class salesController {
+	
+	@RequestMapping("/sales/list")
+	public String salesList() throws Exception {
+		return "/sales/sales_list";
+	}
+	@RequestMapping("/sales/price")
+	public String salesPrice() throws Exception {
+		return "/sales/sales_price";
+	}
+
+}

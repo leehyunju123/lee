@@ -1,0 +1,47 @@
+package com.koffice.restaurant.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class restaurantController {
+
+	@RequestMapping("/restaurant/list")
+	public String restaurantList() throws Exception {
+		return "/restaurant/restaurant_list";
+	}
+
+	@RequestMapping("/restaurant/detail")
+	public String restaurantDetail() throws Exception {
+		return "/restaurant/restaurant_detail";
+	}
+<<<<<<< .mine
+
+	@RequestMapping("/restaurant/correction")
+	public String restaurantCorrection() throws Exception {
+		return "/restaurant/restaurant_correction";
+||||||| .r13
+=======
+	@RequestMapping("/restaurant/reg")
+	public String restaurantReg() throws Exception {
+		return "/restaurant/restaurant_reg";
+>>>>>>> .r14
+	}
+
+	@RequestMapping("/restaurant/category")
+	public String restaurantCategory() throws Exception {
+		return "/restaurant/restaurant_category";
+	}
+<<<<<<< .mine
+
+	@RequestMapping("/restaurant/addtion")
+	public String restaurantAddtion() throws Exception {
+		return "/restaurant/restaurant_addtion";
+||||||| .r13
+=======
+	@RequestMapping("/restaurant/addition")
+	public String restaurantAddition() throws Exception {
+		return "/restaurant/restaurant_addition";
+>>>>>>> .r14
+	}
+}

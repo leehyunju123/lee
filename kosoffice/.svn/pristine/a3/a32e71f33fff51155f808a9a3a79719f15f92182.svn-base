@@ -1,0 +1,17 @@
+package com.koffice.menu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class menuController {
+	
+	@RequestMapping("/menu/list")
+	public String menuList() throws Exception {
+		return "/menu/menu_list";
+	}
+	@RequestMapping("/menu/reg")
+	public String menuReg() throws Exception {
+		return "/menu/menu_reg";
+	}
+}

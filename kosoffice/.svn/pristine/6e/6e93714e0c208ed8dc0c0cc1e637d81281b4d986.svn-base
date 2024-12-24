@@ -1,0 +1,21 @@
+package com.koffice.manager.cotroller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class managerController {
+	
+	@RequestMapping("/manager/loginpg")
+	public String managerLoginPg() throws Exception {
+		return "/manager/manager_loginpg";
+	}
+	@RequestMapping("/manager/list")
+	public String managerList() throws Exception {
+		return "/manager/manager_list";
+	}
+	@RequestMapping("/manager/reg")
+	public String managerReg() throws Exception {
+		return "/manager/manager_reg";
+	}
+}

@@ -1,0 +1,5 @@
+package com.koffice.manager.dao;
+
+public interface manager_loginpgDao {
+
+}

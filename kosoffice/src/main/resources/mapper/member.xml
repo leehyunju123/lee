@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.member.dao.memberDao">
+
+	<resultMap type="com.koffice.VO.member.MemberInfoVO" id="MemberMap">
+		<result column="member_Phone" property="memberPhone" />
+		<result column="join_Dt" property="joinDt" />
+		<result column="member_Pwd" property="memberPwd" />
+		<result column="quit_Yn" property="quitYn" />
+		<result column="point" property="point" />
+		<result column="order_No" property="orderNo" />
+		<result column="order_Dt" property="orderDt" />
+		<result column="use_Point" property="usePoint" />
+		<result column="after_Point" property="afterPoint" />
+		<result column="rn" property="rn" />
+	</resultMap>
+	
+	<select id = "selectMemberCount" resultType="integer">
+			SELECT
+				count(*)
+			FROM TB_MEMBER_INFO
+			WHERE 1=1
+		<if test="memberPhone!=null and memberPhone!='' ">
+		  	AND MEMBER_PHONE LIKE '%'||#{memberPhone}||'%'
+		</if>
+		<if test="joinDt!=null and joinDt!='' ">
+ 		 	 AND to_char(JOIN_DT,'yyyy-mm-dd') = #{joinDt}
+		</if>
+	</select>
+	
+	<select id = "selectMemberInfoList" resultMap="MemberMap">	
+		SELECT
+			*
+			FROM(
+		SELECT
+		ROWNUM RN,
+		a.MEMBER_PHONE,
+		b.AFTER_POINT,
+		TO_CHAR(a.JOIN_DT,'YYYY-MM-DD') as JOIN_DT,
+		a.QUIT_YN
+		FROM TB_MEMBER_INFO a
+		JOIN TB_POINT_INFO b ON a.MEMBER_PHONE = b.MEMBER_PHONE
+		WHERE 1=1
+		<if test="memberPhone!=null and memberPhone!='' ">
+		 	 AND a.MEMBER_PHONE LIKE '%'||#{memberPhone}||'%'
+		</if>
+		<if test="joinDt!=null and joinDt!='' ">
+ 		 	 AND to_char(a.JOIN_DT,'yyyy-mm-dd') = #{joinDt}
+		</if>
+	    	)
+		WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+		AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	
+	</select>
+	
+	<select id="selectMemberInfo" resultMap = "MemberMap">
+	SELECT
+        A.MEMBER_PHONE,
+        to_char(A.JOIN_DT,'yyyy-mm-dd') JOIN_DT,
+        A.MEMBER_PWD,
+        A.QUIT_YN,
+        B.POINT,
+        B.ORDER_NO,
+       	to_char(B.ORDER_DT,'yyyy-mm-dd') ORDER_DT,
+        B.USE_POINT,
+        B.AFTER_POINT
+    FROM TB_MEMBER_INFO A
+    JOIN TB_POINT_INFO B
+    ON A.MEMBER_PHONE = B.MEMBER_PHONE
+    WHERE A.MEMBER_PHONE = #{memberPhone}
+			
+	</select>
+	
+	<select id = "selectPointCount" resultType="integer">
+			SELECT
+				count(*)
+			FROM TB_POINT_INFO
+			WHERE 1=1
+		 <if test="orderDtFrom!=null and orderDtFrom!='' ">
+		  		AND to_char(order_dt,'yyyy-mm-dd')<![CDATA[>=]]>#{orderDtFrom}
+			</if>
+			<if test="orderDtTo!=null and orderDtTo!='' ">
+		  		AND to_char(order_dt,'yyyy-mm-dd')<![CDATA[<=]]>#{orderDtTo}
+		    	)
+	    	</if>
+		
+	</select>
+	
+		<select id = "selectPointInfoList" resultMap="MemberMap">	
+	SELECT
+		*
+	FROM(
+		SELECT
+			ROWNUM RN,
+	        to_Char(ORDER_DT,'yyyy-mm-dd')ORDER_DT,
+	        USE_POINT,
+	        AFTER_POINT
+	    FROM
+	    	TB_POINT_INFO 
+	    WHERE 1=1
+	    		AND MEMBER_PHONE = #{memberPhone}
+	        <if test="orderDtFrom!=null and orderDtFrom!='' ">
+		  		AND to_char(order_dt,'yyyy-mm-dd')<![CDATA[>=]]>#{orderDtFrom}
+			</if>
+			<if test="orderDtTo!=null and orderDtTo!='' ">
+		  		AND to_char(order_dt,'yyyy-mm-dd')<![CDATA[<=]]>#{orderDtTo}
+	    	</if>
+	    	)
+			WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+			AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	
+	</select>
+	
+	<insert id="insertMemberInfo">
+	  INSERT INTO TB_MEMBER_INFO
+	     (
+	     MEMBER_PHONE,
+	     JOIN_DT,
+	     MEMBER_PWD,
+	     QUIT_YN
+	     )
+	  VALUES
+	     (
+	     #{memberPhone},
+	     sysdate,
+	     #{memberPwd},
+	     #{quitYn}
+	     )	
+	</insert>
+
+	
+	<update id = "updateMemberInfo">
+		UPDATE TB_MEMBER_INFO SET 
+		QUIT_YN = #{quitYn}
+		WHERE MEMBER_PHONE = #{memberPhone}
+	</update>
+	
+	
+	
+</mapper>

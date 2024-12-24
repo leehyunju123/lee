@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.restaurant.dao.restaurantCategoryDao">
+
+	<resultMap type="com.koffice.VO.restaurant.RestaurantCategoryInfoVO" id="RestaurantCategoryMap">
+		<result column="restaurantCategory_Code" property="restaurantCategoryCode" />
+		<result column="restaurantCategory_Name" property="restaurantCategoryName" />
+		<result column="reg_Dt" property="regDt" />
+		<result column="active_Yn" property="activeYn" />
+		<result column="reg_Id" property="regId" />
+		
+	</resultMap>
+	
+	<select id = "selectRestaurantCategoryCount" resultType="integer">
+	
+	SELECT
+		count(*)
+	FROM TB_RESTAURANTCATEGORY_INFO r
+	WHERE 1=1
+	<if test="restaurantCategoryName!=null and restaurantCategoryName!='' ">
+	  AND RESTAURANTCATEGORY_NAME LIKE '%'||#{restaurantCategoryName}||'%'
+	</if>
+	
+	</select>
+	
+		<select id = "selectRestaurantCategoryInfoList" resultMap="RestaurantCategoryMap">
+		SELECT
+			RESTAURANTCATEGORY_CODE,
+			RESTAURANTCATEGORY_NAME,
+			REG_DT,
+			ACTIVE_YN,
+			REG_ID
+		FROM TB_RESTAURANTCATEGORY_INFO
+		WHERE 1=1
+	   <if test="restaurantCategoryName!=null and restaurantCategoryName!='' ">
+	  AND RESTAURANTCATEGORY_NAME LIKE '%'||#{restaurantCategoryName}||'%'
+		</if>
+		</select>
+		
+			<select id="selectRestaurantCategoryInfo" resultMap = "RestaurantCategoryMap">
+		SELECT
+			RESTAURANTCATEGORY_CODE,
+			RESTAURANTCATEGORY_NAME,
+			REG_DT,
+			ACTIVE_YN,
+			REG_ID
+			FROM TB_RESTAURANTCATEGORY_INFO
+			WHERE RESTAURANTCATEGORY_CODE = #{restaurantCategoryCode}
+	</select>
+		
+		<insert id = "insertRestaurantCategoryInfo">
+		
+		INSERT INTO TB_RESTAURANTCATEGORY_INFO(
+		    restaurantcategory_code, 
+		    restaurantcategory_name, 
+		    reg_dt, 
+		    active_yn, 
+		    reg_id
+		)
+		VALUES(
+		    (SELECT LPAD(TO_CHAR(NVL(MAX(TO_NUMBER(restaurantcategory_code)), 0) + 1), 2, '0') FROM TB_RESTAURANTCATEGORY_INFO),  -- 3자리로 0 패딩
+		   #{restaurantCategoryName},
+		    SYSDATE,
+		    #{activeYn}	,
+		    NULL
+		) 
+		</insert>	
+		
+		
+		<update id = "updateRestaurantCategoryInfo">
+		UPDATE TB_RESTAURANTCATEGORY_INFO SET 
+			RESTAURANTCATEGORY_NAME = #{restaurantCategoryName},
+			ACTIVE_YN = #{activeYn}	
+		WHERE RESTAURANTCATEGORY_CODE = #{restaurantCategoryCode}
+	</update>
+		
+		
+		
+		
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.menu.dao.menuDao">
+
+	<resultMap type="com.koffice.VO.menu.MenuInfoVO" id="MenuMap">
+		<result column="menu_Code" property="menuCode" />
+		<result column="menu_Name" property="menuName" />
+		<result column="menu_Price" property="menuPrice" />
+		<result column="menu_Detail" property="menuDetail" />
+		<result column="menu_St" property="menuSt" />
+		<result column="menu_Image" property="menuImage" />
+		<result column="reg_Dt" property="regDt" />
+		<result column="reg_Id" property="regId" />
+		<result column="restaurant_Code" property="restaurantCode" />
+		<result column="restaurant_Name" property="restaurantName" />
+		<result column="rn" property="rn" />
+	</resultMap>
+	
+	<select id = "selectMenuCount" resultType="integer">
+		SELECT
+			count(*)
+		FROM TB_MENU_INFO r
+		JOIN TB_RESTAURANT_INFO a ON r.restaurant_code = a.restaurant_code
+		WHERE 1=1
+		  <if test="restaurantName!=null and restaurantName!='' ">
+	      	 	  AND a.RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+	      </if>
+		  <if test="menuName!=null and menuName!='' ">
+				  AND r.MENU_NAME LIKE '%'||#{menuName}||'%'
+		  </if>
+		
+	</select>
+	
+	
+	<select id = "selectMenuInfoList" resultMap="MenuMap">
+	
+		SELECT * 
+	 FROM (
+		SELECT
+			ROWNUM RN,
+		    r.MENU_CODE,
+		    r.MENU_NAME,
+		    r.MENU_PRICE,
+		    r.MENU_DETAIL,
+		    r.MENU_ST,
+		    r.MENU_IMAGE,
+		    r.REG_DT,
+		    r.REG_ID,
+		    r.RESTAURANT_CODE,
+		    a.RESTAURANT_NAME
+		FROM TB_MENU_INFO r
+		  JOIN TB_RESTAURANT_INFO a ON r.RESTAURANT_CODE = a.RESTAURANT_CODE  
+     	WHERE 1=1
+        <if test="restaurantName!=null and restaurantName!='' ">
+      	 	 AND a.RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+       </if>
+		<if test="menuName!=null and menuName!='' ">
+			  AND r.MENU_NAME LIKE '%'||#{menuName}||'%'
+		</if>
+	)
+	WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+	AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	
+	</select>
+	
+		<select id="selectMenuInfo" resultMap = "MenuMap">
+	SELECT
+        M.MENU_CODE,
+        M.RESTAURANT_CODE,
+        M.MENU_NAME,
+        M.MENU_PRICE,
+        M.MENU_DETAIL,
+        M.MENU_ST,
+        M.REG_DT,
+        M.REG_ID,
+        R.RESTAURANT_NAME
+    FROM TB_MENU_INFO M
+    JOIN TB_RESTAURANT_INFO R
+    ON M.RESTAURANT_CODE = R.RESTAURANT_CODE
+    WHERE M.MENU_CODE = #{menuCode}
+			
+	</select>
+	
+	
+	<insert id = "insertMenuInfo">
+	INSERT INTO TB_MENU_INFO
+	(RESTAURANT_CODE,
+	 MENU_CODE,
+	 MENU_NAME,
+	 MENU_PRICE,
+	 MENU_DETAIL,
+	 MENU_ST,
+	 MENU_IMAGE,
+	 REG_DT
+	)
+	 VALUES
+	 (
+	 #{restaurantCode},
+	 #{menuCode},
+	 #{menuName},
+	 #{menuPrice},
+	 #{menuDetail},
+	 #{menuSt},
+	 #{menuImage},
+	 sysdate
+	 )
+	 
+	</insert>
+	
+	<update id = "updateMenuInfo">
+		UPDATE TB_MENU_INFO SET 
+		MENU_NAME = #{menuName},
+		RESTAURANT_CODE = #{restaurantCode},
+		MENU_PRICE = #{menuPrice},
+		MENU_DETAIL = #{menuDetail},
+		MENU_ST = #{menuSt},
+		MENU_IMAGE = #{menuImage},
+		REG_DT = sysdate
+		WHERE  MENU_CODE = #{menuCode}
+	</update>
+	
+</mapper>

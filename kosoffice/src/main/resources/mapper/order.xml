@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.order.dao.orderDao">
+
+		<resultMap type="com.koffice.VO.order.OrderInfoVO" id="OrderMap">
+		<result column="order_No" property="orderNo" />
+		<result column="order_Dt" property="orderDt" />
+		<result column="order_Price" property="orderPrice" />
+		<result column="payment_Amount" property="paymentAmount" />
+		<result column="order_Qty" property="orderQty" />
+		<result column="point_Yn" property="pointYn" />
+		<result column="discount_Amount" property="discountAmount" />
+		<result column="paymentMethod_Code" property="paymentMethodCode" />
+		<result column="restaurant_Name" property="restaurantName" />
+		<result column="com_Name" property="comName" />
+		<result column="menu_Name" property="menuName" />
+		<result column="business_Number" property="businessNumber" />
+		<result column="ceo_Name" property="ceoName" />
+		<result column="menu_Price" property="menuPrice" />
+		<result column="qty" property="qty" />
+		<result column="price" property="price" />
+		<result column="restaurantOrder_No" property="restaurantOrderNo" />
+		
+	</resultMap>
+	
+	<select id = "selectOrderCount" resultType="integer">
+	   SELECT 
+	 	  count(*)
+       FROM TB_ORDER_INFO A,
+            TB_CD_COM B,
+            ( SELECT RO.ORDER_NO, 
+                RO.ORDER_DT, 
+                CASE WHEN RO.RESTAURANT_CNT> 1 THEN RS.RESTAURANT_NAME || ' 외 '|| (RO.RESTAURANT_CNT-1) || '건' 
+                ELSE RS.RESTAURANT_NAME 
+                END RESTAURANT_NAME
+             FROM (
+                SELECT 
+                    ORDER_NO, ORDER_DT, MIN(RESTAURANT_CODE) RESTAURANT_CODE, COUNT(*) RESTAURANT_CNT
+                  FROM TB_RESTAURANTORDER_INFO
+                  GROUP BY ORDER_NO, ORDER_DT
+                  ) RO, TB_RESTAURANT_INFO RS
+                  WHERE RO.RESTAURANT_CODE = RS.RESTAURANT_CODE) C  
+        WHERE A.PAYMENTMETHOD_CODE = B.COM_CD
+           AND B.GRP_CD = 'PY01'
+           AND A.ORDER_NO = C.ORDER_NO
+           AND TO_CHAR(A.ORDER_DT,'YYYYMMDD') = TO_CHAR(C.ORDER_DT,'YYYYMMDD')
+            <if test="restaurantName!=null and restaurantName!='' ">
+			    AND C.RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+			</if>
+		 	<if test="orderDt!=null and orderDt!='' ">
+		 		AND to_char(A.ORDER_DT,'yyyy-mm-dd') = #{orderDt}
+			</if>
+			<if test="comName!=null and comName!='' ">
+		  		AND B.COM_NAME = #{comName}		
+		  	</if>
+	</select>
+	
+	
+	<select id = "selectOrderInfoList" resultMap="OrderMap">
+	 SELECT 
+	   *
+	   FROM (
+		SELECT 
+	 	  ROWNUM RN,
+          A.ORDER_NO,
+          A.ORDER_PRICE,
+          A.PAYMENTMETHOD_CODE,
+          A.ORDER_DT,
+          B.COM_NAME,
+          C.RESTAURANT_NAME,
+          D.MENU_NAME
+       FROM TB_ORDER_INFO A,
+            TB_CD_COM B,
+            ( SELECT RO.ORDER_NO, 
+                RO.ORDER_DT, 
+                CASE WHEN RO.RESTAURANT_CNT> 1 THEN RS.RESTAURANT_NAME || ' 외 '|| (RO.RESTAURANT_CNT-1) || '건' 
+                ELSE RS.RESTAURANT_NAME 
+                END RESTAURANT_NAME
+             FROM (
+                SELECT 
+                    ORDER_NO, ORDER_DT, MIN(RESTAURANT_CODE) RESTAURANT_CODE, COUNT(*) RESTAURANT_CNT
+                  FROM TB_RESTAURANTORDER_INFO
+                  GROUP BY ORDER_NO, ORDER_DT
+                  ) RO, TB_RESTAURANT_INFO RS
+                  WHERE RO.RESTAURANT_CODE = RS.RESTAURANT_CODE) C,
+             ( SELECT 
+             ME.ORDER_NO, ME.ORDER_DT, 
+             CASE WHEN ME.MENU_CNT>1 THEN MN.MENU_NAME || ' 외 ' || (ME.MENU_CNT-1) || '건'
+                  ELSE MN.MENU_NAME
+                  END MENU_NAME
+          FROM (
+         SELECT ORDER_NO, ORDER_DT,
+                MIN(MENU_CODE) MENU_CODE, COUNT(*) MENU_CNT
+           FROM TB_RESTAURANTORDERMENU_INFO
+           GROUP BY ORDER_NO, ORDER_DT
+           ) ME, TB_MENU_INFO MN
+           WHERE ME.MENU_CODE = MN.MENU_CODE )  D    
+        WHERE A.PAYMENTMETHOD_CODE = B.COM_CD
+           AND B.GRP_CD = 'PY01'
+           AND A.ORDER_NO = C.ORDER_NO
+           AND TO_CHAR(A.ORDER_DT,'YYYYMMDD') = TO_CHAR(C.ORDER_DT,'YYYYMMDD')
+           AND A.ORDER_NO = D.ORDER_NO
+           AND TO_CHAR(A.ORDER_DT,'YYYYMMDD') = TO_CHAR(D.ORDER_DT,'YYYYMMDD')
+            <if test="restaurantName!=null and restaurantName!='' ">
+			    AND C.RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+			</if>
+			 <if test="orderDt!=null and orderDt!='' ">
+		 		AND to_char(A.ORDER_DT,'yyyy-mm-dd') = #{orderDt}
+			</if>
+			<if test="comName!=null and comName!='' ">
+		  		AND B.COM_NAME = #{comName}		
+		  	</if>
+		)
+		WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+		AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+		
+	
+	</select>
+	
+		<select id="selectOrderInfo" resultMap = "OrderMap">
+		SELECT 
+			r.order_price,
+			r.discount_amount,
+			r.payment_amount,
+			e.com_name,
+			b.restaurant_name,
+			b.business_number,
+			b.ceo_name,
+			a.order_dt,
+			d.menu_name,
+			d.menu_price,
+			c.qty,
+			c.price,
+			a.restaurantorder_No
+			FROM TB_ORDER_INFO r
+			JOIN TB_RESTAURANTORDER_INFO a ON r.order_no = a.order_no
+			JOIN TB_RESTAURANT_INFO b ON a.restaurant_code = b.restaurant_code
+			JOIN TB_RESTAURANTORDERMENU_INFO c ON a.restaurant_code = c.restaurant_code
+			JOIN TB_MENU_INFO d ON c.menu_code = d.menu_code
+			JOIN TB_CD_COM e ON r.paymentmethod_code = e.com_cd
+			WHERE r.order_no = #{orderNo}
+			and c.order_no = #{orderNo}
+	</select>
+	
+</mapper>

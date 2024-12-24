@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.sales.dao.salesDao">
+
+	<resultMap type="com.koffice.VO.sales.SalesInfoVO" id="SalesMap">
+		<result column="restaurant_Code" property="restaurantCode" />
+		<result column="sales_Dt" property="salesDt" />
+		<result column="sales_Amount" property="salesAmount" />
+		<result column="restaurant_Name" property="restaurantName" />
+		<result column="rn" property="rn" />
+		
+	</resultMap>
+	
+	<select id = "selectSalesCount" resultType="integer">
+		SELECT
+			count(*)
+		FROM TB_SALES_INFO
+		WHERE 1=1
+		<if test="salesDtFrom!=null and salesDtFrom!='' ">
+	  		AND to_char(sales_dt,'yyyy-mm-dd')<![CDATA[>=]]>#{salesDtFrom}
+		</if>
+		<if test="salesDtTo!=null and salesDtTo!='' ">
+	  		AND to_char(sales_dt,'yyyy-mm-dd')<![CDATA[<=]]>#{salesDtTo}
+		</if>
+	</select>
+	
+	
+	<select id = "selectSalesInfoList" resultMap="SalesMap">
+	    SELECT
+	       * 
+	      FROM (
+			SELECT 
+			  ROWNUM RN,
+			  SALES_DT,
+			  SALES_AMOUNT
+			FROM (
+				SELECT 
+		    		TO_CHAR(SALES_DT, 'YYYY-MM-DD') SALES_DT,
+		    		SUM(SALES_AMOUNT) SALES_AMOUNT
+				FROM 
+		    		TB_SALES_INFO
+				WHERE 1=1
+		    <if test="salesDtFrom!=null and salesDtFrom!='' ">
+		  		and to_char(sales_dt,'yyyy-mm-dd')<![CDATA[>=]]>#{salesDtFrom}
+			</if>
+			<if test="salesDtTo!=null and salesDtTo!='' ">
+		  	    and to_char(sales_dt,'yyyy-mm-dd')<![CDATA[<=]]>#{salesDtTo}
+			</if>
+				GROUP BY 
+		    		TO_CHAR(SALES_DT, 'YYYY-MM-DD')
+	        ) A
+	  	)
+		WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+		AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	
+	</select>
+			
+		<select id="selectSalesInfo" resultMap="SalesMap">
+		    select *
+		    from (
+		        select
+		            ROWNUM RN,
+					b.restaurant_name,
+					a.sales_amount
+					from tb_sales_info a
+					join tb_restaurant_info b on a.restaurant_code = b.restaurant_code
+					where to_char(a.sales_dt,'yyyy-mm-dd') = #{salesDt}
+
+		    )
+		    WHERE rn <![CDATA[ > ]]> (#{currentPage} - 1) * #{countPerPage}
+		    AND rn <![CDATA[ <= ]]> #{currentPage} * #{countPerPage}
+		</select>
+
+	 
+</mapper>

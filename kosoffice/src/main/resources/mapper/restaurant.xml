@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.restaurant.dao.restaurantDao">
+
+	<resultMap type="com.koffice.VO.restaurant.RestaurantInfoVO" id="RestaurantMap">
+		<result column="restaurant_Code" property="restaurantCode" />
+		<result column="restaurant_Name" property="restaurantName" />
+		<result column="restaurant_Category" property="restaurantCategory" />
+		<result column="restaurantCategory_Name" property="restaurantCategoryName" />
+		<result column="restaurant_Phone" property="restaurantPhone" />
+		<result column="restaurant_Email" property="restaurantEmail" />
+		<result column="open_Dt" property="openDt" />
+		<result column="close_Dt" property="closeDt" />
+		<result column="ceo_Name" property="ceoName" />
+		<result column="business_Number" property="businessNumber" />
+		<result column="open_Yn" property="openYn" />
+		<result column="reg_Dt" property="regDt" />
+		<result column="reg_Id" property="regId" />
+		<result column="restaurant_Image" property="restaurantImage" />
+		<result column="rn" property="rn" />
+	</resultMap>
+	
+	<select id = "selectRestaurantCount" resultType="integer">
+	SELECT
+		count(*)
+	FROM TB_RESTAURANT_INFO r
+	WHERE 1=1
+	<if test="restaurantName!=null and restaurantName!='' ">
+	  AND RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+	</if>
+	<if test="openYn!=null and openYn!='' ">
+	  AND OPEN_YN=#{openYn}
+	</if>
+	<if test="restaurantCategory!=null and restaurantCategory!='' ">
+	  AND RESTAURANT_CATEGORY = #{restaurantCategory}
+	</if>
+	
+	</select>
+	
+	
+	<select id = "selectRestaurantInfoList" resultMap="RestaurantMap">
+	SELECT * 
+	 FROM (
+		SELECT
+		    ROWNUM RN,
+			RESTAURANT_CODE,
+			RESTAURANT_IMAGE,
+			RESTAURANT_NAME,
+			RESTAURANT_CATEGORY,
+			c.com_name RESTAURANTCATEGORY_NAME,
+			RESTAURANT_PHONE,
+			RESTAURANT_EMAIL,
+			OPEN_DT,
+			CLOSE_DT,
+			CEO_NAME,
+			BUSINESS_NUMBER,
+			OPEN_YN,
+			REG_DT,
+			REG_ID
+		FROM TB_RESTAURANT_INFO r
+		JOIN tb_cd_com c ON r.RESTAURANT_CATEGORY = c.com_cd
+		WHERE 1=1
+		<if test="restaurantName!=null and restaurantName!='' ">
+		  AND RESTAURANT_NAME LIKE '%'||#{restaurantName}||'%'
+		</if>
+		<if test="openYn!=null and openYn!='' ">
+		  AND OPEN_YN=#{openYn}
+		</if>
+		<if test="restaurantCategory!=null and restaurantCategory!='' ">
+		  AND RESTAURANT_CATEGORY = #{restaurantCategory}
+		</if>
+	)
+	WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+	AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	</select>
+	
+	<select id="selectRestaurantInfo" resultMap = "RestaurantMap">
+		SELECT
+		    RESTAURANT_CODE,
+			RESTAURANT_NAME,
+			CEO_NAME,
+			RESTAURANT_CATEGORY,
+			RESTAURANT_PHONE,
+			RESTAURANT_EMAIL,
+			to_char(OPEN_DT,'yyyy-mm-dd') OPEN_DT,
+			OPEN_YN,
+			CLOSE_DT,
+			BUSINESS_NUMBER
+			FROM TB_RESTAURANT_INFO
+			WHERE RESTAURANT_CODE = #{restaurantCode}
+	</select>
+	
+	<insert id = "insertRestaurantInfo">
+	INSERT INTO TB_RESTAURANT_INFO
+	(RESTAURANT_CODE,
+	 RESTAURANT_NAME, 
+	 CEO_NAME, 
+	 RESTAURANT_CATEGORY, 
+	 RESTAURANT_PHONE, 
+	 RESTAURANT_EMAIL, 
+	 OPEN_DT, 
+     OPEN_YN, 
+	 CLOSE_DT, 
+	 BUSINESS_NUMBER, 
+	 RESTAURANT_IMAGE)
+	 VALUES
+	 (
+	 #{restaurantCode},
+	 #{restaurantName},
+	 #{ceoName},
+	 #{restaurantCategory},
+	 #{restaurantPhone},
+	 #{restaurantEmail},
+	 SYSDATE,
+	 #{openYn},
+	 #{closeDt},
+	 #{businessNumber},
+	 #{restaurantImage}
+	 )
+	 
+	</insert>
+	
+	<update id = "updateRestaurantInfo">
+		UPDATE TB_RESTAURANT_INFO SET 
+			RESTAURANT_NAME = #{restaurantName},
+			RESTAURANT_CATEGORY = #{restaurantCategory},
+			<if test="restaurantPhone!=null and restaurantPhone!='' ">
+			RESTAURANT_PHONE = #{restaurantPhone},
+			</if>
+			<if test="restaurantEmail!=null and restaurantEmail!='' ">
+			RESTAURANT_EMAIL = #{restaurantEmail},
+			</if>
+			OPEN_DT =TO_DATE(#{openDt},'YYYY.MM.DD.'),
+			CLOSE_DT = DECODE( #{openYn},'N' , SYSDATE, null ),
+			CEO_NAME = #{ceoName},
+			BUSINESS_NUMBER = #{businessNumber},
+			OPEN_YN = #{openYn},
+			RESTAURANT_IMAGE = #{restaurantImage}
+		WHERE RESTAURANT_CODE = #{restaurantCode}
+	</update>
+	
+</mapper>

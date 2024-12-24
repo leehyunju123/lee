@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koffice.paymentMethod.dao.paymentDao">
+
+	<resultMap type="com.koffice.VO.payment.PaymentInfoVO" id="PaymentMap">
+		<result column="paymentMethod_Code" property="paymentMethodCode" />
+		<result column="paymentMethod_Name" property="paymentMethodName" />
+		<result column="reg_Dt" property="regDt" />
+		<result column="payment_Amount" property="paymentAmount" />
+		<result column="active_Yn" property="activeYn" />
+	</resultMap>
+	
+	<select id = "selectPaymentCount" resultType="integer">
+			SELECT
+				count(*)
+			FROM TB_PAYMENTMETHOD_INFO r
+			WHERE 1=1
+		<if test="paymentMethodName!=null and paymentMethodName!='' ">
+		  AND PAYMENTMETHOD_NAME LIKE '%'||#{paymentMethodName}||'%'
+		</if>
+		
+	</select>
+	
+	<select id = "selectPaymentInfoList" resultMap="PaymentMap">	
+		SELECT
+			*
+			FROM(
+		SELECT
+		ROWNUM RN,
+		PAYMENTMETHOD_CODE,
+		PAYMENTMETHOD_NAME,
+		TO_CHAR(REG_DT,'YYYY-MM-DD')REG_DT,
+		PAYMENT_AMOUNT,
+		ACTIVE_YN
+		FROM TB_PAYMENTMETHOD_INFO
+		WHERE 1=1
+		 <if test="paymentMethodName!=null and paymentMethodName!='' ">
+		 	  AND PAYMENTMETHOD_NAME LIKE '%'||#{paymentMethodName}||'%'
+	     </if>
+	    	)
+		WHERE RN<![CDATA[ > ]]>(#{currentPage}-1)*#{countPerPage} 
+		AND RN<![CDATA[ <= ]]>#{currentPage}*#{countPerPage}
+	
+	</select>
+	
+	<select id="selectPaymentInfo" resultMap = "PaymentMap">
+		SELECT
+			PAYMENTMETHOD_CODE,
+			PAYMENTMETHOD_NAME,
+			TO_CHAR(REG_DT,'YYYY-MM-DD') REG_DT,
+			PAYMENT_AMOUNT,
+			ACTIVE_YN
+		FROM TB_PAYMENTMETHOD_INFO
+			WHERE PAYMENTMETHOD_CODE = #{paymentMethodCode}
+	</select>
+	
+	<insert id = "insertPaymentInfo">
+	INSERT INTO TB_PAYMENTMETHOD_INFO
+  		(
+  		PAYMENTMETHOD_CODE, 
+  		PAYMENTMETHOD_NAME, 
+  		REG_DT, 
+  		PAYMENT_AMOUNT, 
+  		ACTIVE_YN)
+	VALUES
+  		(
+   	    (SELECT NVL(MAX(PAYMENTMETHOD_CODE), 1) + 1 FROM TB_PAYMENTMETHOD_INFO),
+    	#{paymentMethodName}, 
+    	SYSDATE, 
+    	#{paymentAmount}, 
+    	#{activeYn}
+ 	 )
+	</insert>
+	
+	<update id = "updatePaymentInfo">
+		UPDATE TB_PAYMENTMETHOD_INFO SET 
+			PAYMENTMETHOD_CODE = #{paymentMethodCode},
+			PAYMENTMETHOD_NAME = #{paymentMethodName},
+			ACITVE_YN = #{activeYn}
+		WHERE PAYMENTMETHOD_CODE = #{paymentMethodCode}
+	</update>
+</mapper>
